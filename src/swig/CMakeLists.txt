@@ -21,10 +21,25 @@ if (OPT_PYTHON)
             lmcore
             ${PYTHON_LIBRARIES})
 
+            
+    find_package(Python3 COMPONENTS Interpreter REQUIRED)
+    # Python3_EXECUTABLE は FindPython3 などで見つけた Python の実行ファイルです。
+    execute_process(
+        COMMAND ${Python3_EXECUTABLE} -c "import site; print(site.getsitepackages()[0])"
+        OUTPUT_VARIABLE PYTHON_SITE_PACKAGES
+        OUTPUT_STRIP_TRAILING_WHITESPACE
+    )
+    message(STATUS "Python site-packages: ${PYTHON_SITE_PACKAGES}")
+
     swig_add_library(pythonlmstatic
-         TYPE STATIC
+         TYPE MODULE
          LANGUAGE python
          SOURCES "${CMAKE_CURRENT_LIST_DIR}/lm.i")
+    
+    install(TARGETS _pythonlmstatic
+         LIBRARY DESTINATION ${PYTHON_SITE_PACKAGES} 
+     )
+     
 
     target_include_directories(${SWIG_MODULE_pythonlmstatic_REAL_NAME}
         PUBLIC

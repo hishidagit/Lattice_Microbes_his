@@ -111,7 +111,7 @@ void initPython();
 void finalizePython();
 void startInterpreter();
 void executeScript(string filename, list<string> arguments);
-extern "C" PyObject *PyInit__lm(void);
+extern "C" PyObject *PyInit__pythonlm(void);
 
 // Allocate the profile space.
 PROF_ALLOC;
@@ -287,7 +287,7 @@ void discoverEnvironment()
 
 void initPython()
 {
-	PyImport_AppendInittab("_lm", PyInit__lm);
+	PyImport_AppendInittab("_lm", PyInit__pythonlm);
 	Py_Initialize();
 
 	PyObject *builtins = PyEval_GetBuiltins();
