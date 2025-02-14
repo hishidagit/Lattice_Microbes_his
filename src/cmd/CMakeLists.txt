@@ -51,8 +51,9 @@ if (OPT_PYTHON)
      # )
      # インポートライブラリターゲットの定義
      add_library(PYTHONLM SHARED IMPORTED)
+     message(STATUS "MY_VAR = ${SWIG_LM_MODULE_NAME}")
      set_target_properties(PYTHONLM PROPERTIES
-     IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/_lm.cpython-37m-x86_64-linux-gnu.so"
+          IMPORTED_LOCATION "${CMAKE_BINARY_DIR}/${SWIG_LM_MODULE_NAME}"
      )
      target_link_libraries(lm_python PRIVATE 
           # _pythonlm
