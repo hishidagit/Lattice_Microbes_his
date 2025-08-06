@@ -9,9 +9,14 @@ if(OPT_PYTHON)
     set(DETECTED_PREFIX "${_python_prefix}"
         CACHE INTERNAL "Prefix inferred from python binary" FORCE)
     if(NOT _python_prefix_status)
-        set(CMAKE_INSTALL_PREFIX "${DETECTED_PREFIX}" CACHE PATH "Install prefix" FORCE)
+        # Only set install prefix if it wasn't explicitly provided
+        if(CMAKE_INSTALL_PREFIX_INITIALIZED_TO_DEFAULT)
+            set(CMAKE_INSTALL_PREFIX "${DETECTED_PREFIX}" CACHE PATH "Install prefix" FORCE)
+            message(STATUS "Inferring install prefix from '${DETECTED_PREFIX}'")
+        else()
+            message(STATUS "Using explicitly set install prefix: ${CMAKE_INSTALL_PREFIX}")
+        endif()
         set(CMAKE_PREFIX_PATH "${DETECTED_PREFIX}" CACHE PATH "Virtual environment libraries" FORCE)
-        message(STATUS "Inferring install prefix from '${DETECTED_PREFIX}'")
     endif()
 
     # If we're compiling using anaconda gcc, if we don't set the sysroot g++ will try to link the wrong librt
